@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notion Quote Widget</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: transparent; /* Seamless blend with Notion */
+            text-align: center;
+            box-sizing: border-box;
+        }
+        #quote-container {
+            max-width: 500px;
+            opacity: 0;
+            transition: opacity 0.8s ease-in-out;
+        }
+        .quote {
+            font-size: 1.2rem;
+            font-weight: 500;
+            line-height: 1.5;
+            color: #37352f; /* Standard Notion light text color */
+            margin-bottom: 8px;
+        }
+        .author {
+            font-size: 0.9rem;
+            color: #787774; /* Standard Notion muted text color */
+            font-style: italic;
+        }
+        /* Automatic support for Notion Dark Mode users */
+        @media (prefers-color-scheme: dark) {
+            .quote { color: #ebeeee; }
+            .author { color: #9b9b9b; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="quote-container">
+        <div class="quote" id="quote">Loading...</div>
+        <div class="author" id="author"></div>
+    </div>
+
+    <script>
+        // 1. ADD YOUR CUSTOM QUOTES HERE
+        const quotesList = [
+            { text: "The only way to do great work is to love what you do.", author: "Steve Jobs" },
+            { text: "Done is better than perfect.", author: "Sheryl Sandberg" },
+            { text: "Code is like humor. When you have to explain it, it’s bad.", author: "Cory House" },
+            { text: "Simplicity is the ultimate sophistication.", author: "Leonardo da Vinci" },
+            { text: "Your custom quote goes right here inside these marks.", author: "Your Name" }
+        ];
+
+        function displayRandomQuote() {
+            const container = document.getElementById('quote-container');
+            const quoteText = document.getElementById('quote');
+            const authorText = document.getElementById('author');
+            
+            // Pick a random index
+            const randomIndex = Math.floor(Math.random() * quotesList.length);
+            const selectedQuote = quotesList[randomIndex];
+            
+            // Inject text
+            quoteText.innerText = `“${selectedQuote.text}”`;
+            authorText.innerText = selectedQuote.author ? `— ${selectedQuote.author}` : '';
+            
+            // Fade in effect
+            container.style.opacity = 1;
+        }
+
+        // Run the function when the page loads
+        window.onload = displayRandomQuote;
+    </script>
+</body>
+</html>
