@@ -13,31 +13,63 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background-color: transparent; /* Seamless blend with Notion */
+            background-color: transparent;
             text-align: center;
             box-sizing: border-box;
         }
         #quote-container {
             max-width: 500px;
             opacity: 0;
-            transition: opacity 0.8s ease-in-out;
+            transition: opacity 0.4s ease-in-out;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
         .quote {
             font-size: 1.2rem;
             font-weight: 500;
             line-height: 1.5;
-            color: #37352f; /* Standard Notion light text color */
+            color: #37352f;
             margin-bottom: 8px;
         }
         .author {
             font-size: 0.9rem;
-            color: #787774; /* Standard Notion muted text color */
+            color: #787774;
             font-style: italic;
+            margin-bottom: 20px;
         }
-        /* Automatic support for Notion Dark Mode users */
+        /* Minimalist Circular Emoji Button */
+        .next-btn {
+            background-color: rgba(55, 53, 47, 0.04);
+            border: none;
+            width: 32px;
+            height: 32px;
+            font-size: 1rem;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.2s ease, transform 0.2s ease;
+            user-select: none;
+        }
+        .next-btn:hover {
+            background-color: rgba(55, 53, 47, 0.08);
+            transform: scale(1.05);
+        }
+        .next-btn:active {
+            transform: scale(0.95);
+        }
+        /* Dark Mode Compatibility */
         @media (prefers-color-scheme: dark) {
             .quote { color: #ebeeee; }
             .author { color: #9b9b9b; }
+            .next-btn {
+                background-color: rgba(255, 255, 255, 0.05);
+            }
+            .next-btn:hover {
+                background-color: rgba(255, 255, 255, 0.1);
+            }
         }
     </style>
 </head>
@@ -46,6 +78,7 @@
     <div id="quote-container">
         <div class="quote" id="quote">Loading...</div>
         <div class="author" id="author"></div>
+        <button class="next-btn" onclick="loadNextQuote()">🔄</button>
     </div>
 
     <script>
@@ -54,29 +87,44 @@
             { text: "The only way to do great work is to love what you do.", author: "Steve Jobs" },
             { text: "Done is better than perfect.", author: "Sheryl Sandberg" },
             { text: "Code is like humor. When you have to explain it, it’s bad.", author: "Cory House" },
-            { text: "Simplicity is the ultimate sophistication.", author: "Leonardo da Vinci" },
-            { text: "Your custom quote goes right here inside these marks.", author: "Your Name" }
+            { text: "‘現實’只能靠輸出改變.", author: "" }
+            { text: "Just find someone, and seek feedback.", author: "" }
         ];
 
-        function displayRandomQuote() {
+        let lastIndex = -1;
+
+        function getRandomQuote() {
+            let randomIndex;
+            do {
+                randomIndex = Math.floor(Math.random() * quotesList.length);
+            } while (randomIndex === lastIndex && quotesList.length > 1);
+            
+            lastIndex = randomIndex;
+            return quotesList[randomIndex];
+        }
+
+        function displayQuote() {
             const container = document.getElementById('quote-container');
             const quoteText = document.getElementById('quote');
             const authorText = document.getElementById('author');
             
-            // Pick a random index
-            const randomIndex = Math.floor(Math.random() * quotesList.length);
-            const selectedQuote = quotesList[randomIndex];
+            const selectedQuote = getRandomQuote();
             
-            // Inject text
             quoteText.innerText = `“${selectedQuote.text}”`;
             authorText.innerText = selectedQuote.author ? `— ${selectedQuote.author}` : '';
             
-            // Fade in effect
             container.style.opacity = 1;
         }
 
-        // Run the function when the page loads
-        window.onload = displayRandomQuote;
+        function loadNextQuote() {
+            const container = document.getElementById('quote-container');
+            container.style.opacity = 0;
+            setTimeout(() => {
+                displayQuote();
+            }, 400); 
+        }
+
+        window.onload = displayQuote;
     </script>
 </body>
 </html>
